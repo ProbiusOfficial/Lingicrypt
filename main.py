@@ -7,17 +7,13 @@ def mushroom_spore_encode(text):
     
     encoded = []
     for char in text:
-        # 三进制转换
         num = ord(char)
         digits = []
         while num > 0:
             num, rem = divmod(num, 3)
             digits.append(str(rem))
-        # 补零对齐到5位并反转
-        ternary = ''.join(reversed(digits)).zfill(5)
-        # 转换为灵感菇🍄
+        ternary = ''.join(reversed(digits)).zfill(13)  
         mushroom = ''.join([mapping[d] for d in ternary])
-        # 封装孢子结构
         encoded.append(f"{spore}{mushroom}{spore}")
     
     return ''.join(encoded)
@@ -27,16 +23,13 @@ def mushroom_spore_decode(encoded_str):
     reverse_map = {'菇':'0', '哩':'1', '哇擦':'2'}
     
     parts = encoded_str.split(spore)
-    # 过滤空值和标记残留
     codes = [p for p in parts if p and not p.startswith('灵感菇')]
     
     decoded = []
     for code in codes:
-        # 双指针解析变长编码
         ptr = 0
         digits = []
         while ptr < len(code):
-            # 最长匹配优先
             if code.startswith('哇擦', ptr):
                 digits.append('2')
                 ptr += 2
@@ -49,8 +42,10 @@ def mushroom_spore_decode(encoded_str):
             else:
                 raise ValueError(f"非法字符在位置 {ptr}: {code[ptr:ptr+2]}")
         
-        # 三进制转十进制
-        value = sum(int(d)*3**(4-i) for i,d in enumerate(digits))
+        if len(digits) != 13:
+            raise ValueError("编码长度不符合13位分组规则")
+        
+        value = sum(int(digit)*3**(12 - pos) for pos, digit in enumerate(digits))
         decoded.append(chr(value))
     
     return ''.join(decoded)
