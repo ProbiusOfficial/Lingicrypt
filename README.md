@@ -34,6 +34,7 @@ J --> K[Unicode验证]
 ```cmd
 python main.py [-h] (-e | -d) [-f FILE] [-o OUTPUT] [text]
 ```
+![image](https://github.com/user-attachments/assets/3eeee5a4-dd19-44ff-9984-cbd96a162e35)
 
 ### 尾
 
